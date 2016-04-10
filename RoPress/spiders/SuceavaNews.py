@@ -21,6 +21,7 @@ class SuceavanewsSpider(scrapy.Spider):
 		for link, title, date in zip(links, titles, dates):
 			item = RopressItem()
 			item['link'] = link
+			title = title.encode(encoding='UTF-8',errors='strict')
 			item['title'] = title
 			item['county'] = 'Suceava'
 			item['city'] = 'Suceava'
