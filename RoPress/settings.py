@@ -14,6 +14,11 @@ BOT_NAME = 'RoPress'
 SPIDER_MODULES = ['RoPress.spiders']
 NEWSPIDER_MODULE = 'RoPress.spiders'
 
+DB_HOST = '104.238.188.243'
+DB_PORT = 3306
+DB_USER = 'admin_root'
+DB_PASSWD = 'tekit2016'
+DB_DB = 'admin_press'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'RoPress (+http://www.yourdomain.com)'
@@ -62,7 +67,7 @@ NEWSPIDER_MODULE = 'RoPress.spiders'
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'RoPress.pipelines.MySQLStorePipeline': 300,
+    'RoPress.pipelines.MySQLPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
