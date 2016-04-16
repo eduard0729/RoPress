@@ -16,7 +16,7 @@ NEWSPIDER_MODULE = 'RoPress.spiders'
 
 DB_HOST = '104.238.188.243'
 DB_PORT = 3306
-DB_USER = 'admin_root'
+DB_USER = 'admin_press'
 DB_PASSWD = 'tekit2016'
 DB_DB = 'admin_press'
 

@@ -43,7 +43,7 @@ class MySQLPipeline(object):
     print "ok"
     def insert_record(self, tx, item):
 		result = tx.execute(
-			""" INSERT INTO press VALUES (title, press, textul, link, county, data, city) VALUES (%s, %s, %s, %s, %s, %s, %s)""", (item['title'].encode('utf-8'), item['press'].encode('utf-8'),  item['text'], item['link'].encode('utf-8'), item['county'],  datetime.today(), item['city']))
+            "INSERT INTO press (title, textul, press, county, city) VALUES ('%s', '%s', '%s', '%s', '%s')" % (item['title'], item['text'], item['press'], item['county'], item['city']))
 		if result > 0:
 			self.stats.inc_value('database/items_added')
 
@@ -51,8 +51,6 @@ class MySQLPipeline(object):
         query = self.dbpool.runInteraction(self.insert_record, item)
         query.addErrback(self._handle_error)
         return item
-	
 
-
-	def _handle_error(self, e):
+    def _handle_error(self, e):
 		log.err(e)
