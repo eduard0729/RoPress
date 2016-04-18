@@ -26,12 +26,13 @@ class BotosaninewsSpider(scrapy.Spider):
                 item['press'] = 'BotosaniNews'
                 request = Request(link, callback=self.parse_fulldetail)
                 request.meta['item'] = item
-                yield request   
-    
+                yield request
+
     def parse_fulldetail(self, response):
         item = response.meta['item']
         item['category'] = response.xpath('//ul[@class="cat"]/li/a/text()').extract()
         item['category'] = " ".join(item['category'])
         item['text']= response.xpath('//div[@class="entry-content"]//text()').extract()
         item['text'] = " ".join(item['text'])
+        item['text'] = item['text'].strip()
         yield item

@@ -20,12 +20,11 @@ class SuceavanewsSpider(scrapy.Spider):
 		dates = response.xpath('//div[@id="recent-news-block"]/div[@class="post-container clearfix"]/div[@class="entry-meta entry-header"]/span/text()').extract()
 		for link, title, date in zip(links, titles, dates):
 			item = RopressItem()
-          	item['link'] = link.decode().encode('utf-8')
+          	item['link'] = link
           	title = title.encode(encoding='UTF-8',errors='strict')
           	item['title'] = title
           	item['county'] = 'Suceava'
           	item['city'] = 'Suceava'
-          	item['date'] = date
           	item['press'] = 'SuceavaNews'
           	request = Request(link, callback=self.parse_fulldetail)
           	request.meta['item'] = item
