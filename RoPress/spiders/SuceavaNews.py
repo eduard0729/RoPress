@@ -20,20 +20,22 @@ class SuceavanewsSpider(scrapy.Spider):
 		dates = response.xpath('//div[@id="recent-news-block"]/div[@class="post-container clearfix"]/div[@class="entry-meta entry-header"]/span/text()').extract()
 		for link, title, date in zip(links, titles, dates):
 			item = RopressItem()
-			item['link'] = link
-			title = title.encode(encoding='UTF-8',errors='strict')
-			item['title'] = title
-			item['county'] = 'Suceava'
-			item['city'] = 'Suceava'
-			item['date'] = date
-			item['press'] = 'SuceavaNews'
-			request = Request(link, callback=self.parse_fulldetail)
-			request.meta['item'] = item
-			yield request   
+          	item['link'] = link.decode().encode('utf-8')
+          	title = title.encode(encoding='UTF-8',errors='strict')
+          	item['title'] = title
+          	item['county'] = 'Suceava'
+          	item['city'] = 'Suceava'
+          	item['date'] = date
+          	item['press'] = 'SuceavaNews'
+          	request = Request(link, callback=self.parse_fulldetail)
+          	request.meta['item'] = item
+          	yield request   
     
     def parse_fulldetail(self, response):
         item = response.meta['item']
         item['category'] = response.xpath('//ul[@class="cat"]/li/a/text()').extract()
+        item['category'] = " ".join(item['category'])
         item['text']= response.xpath('//div[@class="entry-content"]//text()').extract()
+        item['text'] = " ".join(item['text'])
         yield item
 

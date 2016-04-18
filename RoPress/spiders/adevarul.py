@@ -33,7 +33,7 @@ class AdevarulSpider(scrapy.Spider):
           item = RopressItem()
           link = 'http://adevarul.ro' + link
           item['county'] = judet
-          item['link'] = link
+          item['link'] = link.decode().encode('utf-8')
           item['city'] = judet
           item['title'] = titles[title]
           item['text'] = shortdescripts[shortdescript]
@@ -44,5 +44,6 @@ class AdevarulSpider(scrapy.Spider):
 
     def parse_fulldetail(self, response):
         item = response.meta['item']
+        item['category'] = 'no-cat'
         item['date'] = response.xpath('//time/@datetime').extract()
         yield item

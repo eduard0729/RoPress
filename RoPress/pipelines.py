@@ -43,7 +43,7 @@ class MySQLPipeline(object):
     print "ok"
     def insert_record(self, tx, item):
 		result = tx.execute(
-            "INSERT INTO press (title, textul, press, county, city) VALUES ('%s', '%s', '%s', '%s', '%s')" % (item['title'], item['text'], item['press'], item['county'], item['city']))
+            "INSERT INTO press (title, textul, press, county, city, category, link) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (item['title'], item['text'], item['press'], item['county'], item['city'], item['category'], item['link']))
 		if result > 0:
 			self.stats.inc_value('database/items_added')
 

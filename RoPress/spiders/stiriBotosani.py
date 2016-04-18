@@ -17,7 +17,6 @@ class StiribotosaniSpider(scrapy.Spider):
         links = response.xpath('//div[@class="col_a"]/div[@class="box"][2]/div[@class="box_01"]/span/h3/a/@href').extract()
         titles = response.xpath('//div[@class="col_a"]/div[@class="box"][2]/div[@class="box_01"]/span/h3/a/text()').extract()
         dates = response.xpath('//div[@class="col_a"]/div[@class="box"][2]/div[@class="box_01"]/div[@class="box_meniu"]/ul/li[@class="FR"]/a/text()').extract()
-
         for link, title, date in zip(links, titles, dates):
             try:
                 if (datetime.datetime.strptime(date, '%I:%M')):
@@ -32,12 +31,12 @@ class StiribotosaniSpider(scrapy.Spider):
                     request.meta['item'] = item
                     yield request   
             except ValueError:
-                pass
-    
+
+
     def parse_fulldetail(self, response):
-    	item = response.meta['item']
-    	item['category'] = response.xpath('//div[@class="col_a"]/div[@class="box_artikle"]/h2/text()').extract()
-    	item['text']= response.xpath('//div[@class="col_a"]/div[@class="box_artikle"]/div[@class="box_01"]//text()').extract()
-    	yield item
+        item = response.meta['item']
+        item['category'] = response.xpath('//div[@class="col_a"]/div[@class="box_artikle"]/h2/text()').extract()
+        item['text']= response.xpath('//div[@class="col_a"]/div[@class="box_artikle"]/div[@class="box_01"]//text()').extract()
+        yield item
 
 

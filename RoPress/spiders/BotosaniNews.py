@@ -31,5 +31,7 @@ class BotosaninewsSpider(scrapy.Spider):
     def parse_fulldetail(self, response):
         item = response.meta['item']
         item['category'] = response.xpath('//ul[@class="cat"]/li/a/text()').extract()
+        item['category'] = " ".join(item['category'])
         item['text']= response.xpath('//div[@class="entry-content"]//text()').extract()
+        item['text'] = " ".join(item['text'])
         yield item
