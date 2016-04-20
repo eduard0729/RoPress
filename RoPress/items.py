@@ -20,3 +20,4 @@ class RopressItem(scrapy.Item):
 	category = scrapy.Field()
 	text = scrapy.Field()
 	date = scrapy.Field()
+	full = scrapy.Field()

@@ -32,13 +32,16 @@ class BotosaninewsSpider(scrapy.Spider):
         links = response.xpath('//div[@id="recent-news-block"]/div[@class="post-container clearfix"]/h2[@class="entry-title"]/a/@href').extract()
         titles = response.xpath('//div[@id="recent-news-block"]/div[@class="post-container clearfix"]/h2[@class="entry-title"]/a/text()').extract()
         dates = response.xpath('//div[@id="recent-news-block"]/div[@class="post-container clearfix"]/div[@class="entry-meta entry-header"]/span/text()').extract()
-        for link, title, date in zip(links, titles, dates):
+        texts = response.xpath('//div[@id="recent-news-block"]/div[@class="post-container clearfix"]/div[@class="entry-summary"]/p/text()').extract()
+        for link, title, date, text in zip(links, titles, dates, texts):
                 item = RopressItem()
                 item['link'] = link
                 item['title'] = title
                 item['county'] = 'Botosani'
                 item['city'] = 'Botosani'
                 item['press'] = 'BotosaniNews'
+                item['text'] = text
+                item['text'] = item['text'].strip()
                 item['date'] = date
                 for x in self.luni:
                     item['date'] = item['date'].replace(x, self.luni[x])
@@ -51,7 +54,7 @@ class BotosaninewsSpider(scrapy.Spider):
         item = response.meta['item']
         item['category'] = response.xpath('//ul[@class="cat"]/li/a/text()').extract()
         item['category'] = " ".join(item['category'])
-        item['text']= response.xpath('//div[@class="entry-content"]//text()').extract()
-        item['text'] = " ".join(item['text'])
-        item['text'] = item['text'].strip()
+        item['full']= response.xpath('//div[@class="entry-content"]//text()').extract()
+        item['full'] = " ".join(item['full'])
+        item['full'] = item['full'].strip()
         yield item
