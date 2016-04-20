@@ -27,6 +27,7 @@ class StiribotosaniSpider(scrapy.Spider):
                     item['county'] = 'Botosani'
                     item['city'] = 'Botosani'
                     item['press'] = 'Stiri.Botosani'
+                    item['date'] = datetime.datetime.today()
                     request = Request(link, callback=self.parse_fulldetail)
                     request.meta['item'] = item
                     yield request   
