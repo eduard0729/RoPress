@@ -12,7 +12,7 @@ from scrapy import signals
 from scrapy.utils.project import get_project_settings
 from scrapy import log
 from datetime import datetime
-
+import time
 SETTINGS = get_project_settings()
 
 class MySQLPipeline(object):
@@ -42,10 +42,18 @@ class MySQLPipeline(object):
         self.dbpool.close()
     print "ok"
     def insert_record(self, tx, item):
-		result = tx.execute(
-            "INSERT INTO press (title, textul, press, county, city, category, link, data) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (item['title'], item['text'], item['press'], item['county'], item['city'], item['category'], item['link'], item['date']))
-		if result > 0:
-			self.stats.inc_value('database/items_added')
+        tx.execute(
+            "SELECT link from press where data = '%s' and county = '%s' and press = '%s'" % (item['date'], item['county'], item['press']))
+        links = [elem['link'] for elem in tx.fetchall()]
+        if item['link'] not in links:
+            
+            result = tx.execute(
+                "INSERT INTO press (title, textul, press, county, city, category, link, data) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (item['title'], item['text'], item['press'], item['county'], item['city'], item['category'], item['link'], item['date']))
+            
+            if result > 0:
+                self.stats.inc_value('database/items_added')
+        else:
+            pass
 
     def process_item(self, item, spider):
         query = self.dbpool.runInteraction(self.insert_record, item)

@@ -62,9 +62,31 @@ class AdevarulSpider(scrapy.Spider):
       'Arad': 'Arad'
       } 
 
-
-
     def parse(self, response):
+
+      if response.url == 'http://adevarul.ro/news/bucuresti/':
+
+        titles = response.xpath('//article/h3[@class="defaultTitle"]/a/text()').extract()
+        links = response.xpath('//article/h3[@class="defaultTitle"]/a/@href').extract()
+        shortdescripts = response.xpath('//div[@class="article-text"]/p[@itemprop="description"]/text()').extract()
+        judet = response.xpath('//span[@class="category-tag"]/a/text()').extract_first()
+        judet = judet.encode(encoding='UTF-8',errors='strict')
+        for title, shortdescript, link in zip(range(0, len(titles)), range(0, len(shortdescripts)), links):
+          titles[title] = titles[title].encode(encoding='UTF-8',errors='strict')
+          shortdescripts[shortdescript] = shortdescripts[shortdescript].encode(encoding='UTF-8',errors='strict')
+          item = RopressItem()
+          link = 'http://adevarul.ro' + link
+          item['county'] = self.jud[judet]
+          item['link'] = link.decode().encode('utf-8')
+          item['city'] = judet
+          item['title'] = titles[title]
+          item['text'] = shortdescripts[shortdescript]
+          item['press'] = 'Adevarul'
+          request = Request(link, callback=self.parse_fulldetail)
+          request.meta['item'] = item
+          yield request
+
+      else:
         titles = response.xpath('//article[@class="adv_blue"]/h3[@class="defaultTitle"]/a/text()').extract()
         links = response.xpath('//article[@class="adv_blue"]/h3[@class="defaultTitle"]/a/@href').extract()
         shortdescripts = response.xpath('//div[@class="article-text"]/p[@itemprop="about"]/text()').extract()
